@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPSIS Web App</title>
+    <style>
+        /* CSS Styles */
+        html {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(#141e30, #243b55);
+        }
+
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 40px;
+            background: rgba(0, 0, 0, .5);
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+            border-radius: 10px;
+        }
+
+        .login-box h2 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .login-box .user-box {
+            position: relative;
+        }
+
+        .login-box .user-box input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            outline: none;
+            background: transparent;
+        }
+
+        .login-box .user-box label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: .5s;
+        }
+
+        .login-box .user-box input:focus ~ label,
+        .login-box .user-box input:valid ~ label {
+            top: -20px;
+            left: 0;
+            color: #03e9f4;
+            font-size: 12px;
+        }
+
+        .login-box input[type="submit"] {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            color: #fff;
+            background: #03e9f4;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-transform: uppercase;
+            margin-top: 40px;
+            transition: background 0.3s ease;
+        }
+
+        .login-box input[type="submit"]:hover {
+            background: #02c7e9;
+        }
+
+        .email-sent {
+            color: #fff;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .made-by {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .made-by a {
+            color: #03e9f4;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .made-by a:hover {
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>TOPSIS Analysis</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div class="user-box">
+                <input type="file" id="input_file" name="input_file" accept=".csv" required>
+                <label for="input_file"></label>
+            </div>
+            <div class="user-box">
+                <input type="text" id="weights" name="weights" required>
+                <label for="weights">Weights (comma-separated)</label>
+            </div>
+            <div class="user-box">
+                <input type="text" id="impacts" name="impacts" required>
+                <label for="impacts">Impacts (comma-separated, '+' or '-')</label>
+            </div>
+            <div class="user-box">
+                <input type="email" id="email" name="email" required>
+                <label for="email">Your Email</label>
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+
+        {% if email_sent %}
+            <p class="email-sent">Result has been sent to your email address.</p>
+        {% endif %}
+    </div>
+
+    <div class="made-by">
+        Made by Pulkit Arora (102103267) <br>
+        <a href="https://www.linkedin.com/in/pulkit-arora-731b17227/" target="_blank">LinkedIn</a> | 
+        <a href="https://github.com/pulkit8690" target="_blank">Github</a>
+    </div>
+</body>
+</html>
