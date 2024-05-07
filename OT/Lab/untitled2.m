@@ -1,43 +1,47 @@
-A=[2 5;1 1];
-B=[80;20];
-C=[0.5 -0.01];
+a = [1 2 1 0 0; 1 1 0 1 0; 1 -1 0 0 1];
+b = [10; 6; 2]
+A = [a b];
+cost = [2 1 0 0 0 0];
+var = {'x1','x2','x3','s1','s2','s3'}
+BasicVariable = [3 4 5];
+zjcj = cost(BasicVariable)*A - cost;
 
-Ineqn=[0 0];
-s=eye(size(A,1));
-index=find(Ineqn>0);
-s(index,:)=-s(index,:);
+simplex_table = [A;zjcj]
+array2table(simplex_table,'VariableNames',var)
 
-objfn=array2table(C);
-
-mat=[A,s];
-constraint=array2table(mat);
-constraint.Properties.VariableNames(1:size(mat,2))={'x1','x2','s1','s2'}
-
-newC=[0.5 -0.01 0 0];
-n=size(mat,2);
-m=size(mat,1);
-
-if(n>m)
-    nCm=nchoosek(n,m);
-    p=nchoosek(1:n,m);
-    sol=[];
-    for i=1:nCm
-        y=zeros(n,1);
-        A1=mat(:,p(i,:));
-        X=A1\B;
-        if(X>=0 & X~=inf & X~=-inf)
-            y(p(i,:))=X;
-            sol=[sol y];
+RUN=true;
+while(RUN)
+    if any(zjcj(1:end-1)<0)
+        fprintf('Current BFS is not optimal\n')
+        zc = zjcj(1:end-1);
+        [enter_val, pvt_col] = min(zc);
+        if all(A(:,pvt_col)<=0)
+            error('LPP is unbounded');
+        else
+            sol = A(:,end);
+            column = A(:,pvt_col);
+            for i = 1:size(A,1)
+                if column(i) > 0
+                    ratio(i) = sol(i)./column(i);
+                else
+                    ratio(i) = inf;
+                end
+            end
+            [leaving_value, pvt_row] = min(ratio);
         end
+        BasicVariable(pvt_row) = pvt_col;
+        pvt_key = A(pvt_row, pvt_col);
+        A(pvt_row,:) = A(pvt_row,:)./pvt_key;
+        for i = 1:size(A,1)
+            if i~= pvt_row
+                A(i,:) = A(i,:) - A(i,pvt_col).*A(pvt_row,:);
+            end
+        end
+        zjcj = cost(BasicVariable)*A - cost;
+        next_table = [zjcj; A];
+        array2table(next_table,'VariableNames',var)
+    else
+        RUN=false;
+        fprintf('The final optimal value is %f \n', zjcj(end));
     end
 end
-
-Z=newC*sol;
-[value, ind]=max(Z);
-bfs=sol(:,ind);
-opt=[bfs' value];
-array2table(opt,)
-
-
-
-
